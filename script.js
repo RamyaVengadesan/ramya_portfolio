@@ -19,10 +19,16 @@ document.querySelectorAll('.nav-link').forEach(l => l.addEventListener('click', 
 }));
 backToTop.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'}));
 
+/* ============ HOVER/TOUCH DETECTION ============ */
+/* Only devices with a real mouse get the 3D tilt effects. On touch,
+   mousemove can fire once (on tap) without a matching mouseleave,
+   which used to leave cards/panels permanently rotated/shifted. */
+const canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
 /* ============ HERO CODE WINDOW TILT (subtle) ============ */
 const codeWindow = document.getElementById('codeWindow');
 const heroEl = document.querySelector('.hero-3d');
-if (heroEl && codeWindow){
+if (heroEl && codeWindow && canHover){
   heroEl.addEventListener('mousemove', e => {
     const r = heroEl.getBoundingClientRect();
     const px = (e.clientX - r.left) / r.width - 0.5;
@@ -71,21 +77,23 @@ if (typeTarget){
 }
 
 /* ============ PROJECT CARD TILT ============ */
-document.querySelectorAll('.tilt-card').forEach(card => {
-  card.addEventListener('mousemove', e => {
-    const r = card.getBoundingClientRect();
-    const px = (e.clientX - r.left) / r.width;
-    const py = (e.clientY - r.top) / r.height;
-    const rx = (py - 0.5) * -10;
-    const ry = (px - 0.5) * 10;
-    card.style.transform = `perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-6px)`;
-    card.style.setProperty('--mx', `${px*100}%`);
-    card.style.setProperty('--my', `${py*100}%`);
+if (canHover){
+  document.querySelectorAll('.tilt-card').forEach(card => {
+    card.addEventListener('mousemove', e => {
+      const r = card.getBoundingClientRect();
+      const px = (e.clientX - r.left) / r.width;
+      const py = (e.clientY - r.top) / r.height;
+      const rx = (py - 0.5) * -10;
+      const ry = (px - 0.5) * 10;
+      card.style.transform = `perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-6px)`;
+      card.style.setProperty('--mx', `${px*100}%`);
+      card.style.setProperty('--my', `${py*100}%`);
+    });
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = 'perspective(900px) rotateX(0) rotateY(0) translateY(0)';
+    });
   });
-  card.addEventListener('mouseleave', () => {
-    card.style.transform = 'perspective(900px) rotateX(0) rotateY(0) translateY(0)';
-  });
-});
+}
 
 /* ============ SCROLL REVEAL ============ */
 const revealEls = document.querySelectorAll('.reveal, .reveal-scale');

@@ -31,7 +31,7 @@
 }
 
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
+html{scroll-behavior:smooth;overflow-x:hidden;width:100%}
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   *{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important;scroll-behavior:auto !important}
@@ -79,7 +79,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
   background:linear-gradient(90deg,var(--cyan),transparent);
 }
 
-.section-head{max-width:640px;margin-bottom:56px}
+.section-head{max-width:640px;margin-bottom:40px}
 .section-head h2{
   font-family:var(--font-display);
   font-size:clamp(1.9rem,4vw,2.8rem);
@@ -102,9 +102,9 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
   100%{background-position:0% 50%}
 }
 
-section{position:relative;padding:120px 0}
-@media (max-width:900px){ section{padding:88px 0} }
-@media (max-width:640px){ section{padding:70px 0} }
+section{position:relative;padding:70px 0}
+@media (max-width:900px){ section{padding:56px 0} }
+@media (max-width:640px){ section{padding:44px 0} }
 
 /* ============ BACKGROUND FX ============ */
 #bg-canvas{
@@ -549,6 +549,16 @@ nav a:hover::after{width:100%}
 .feature-list{display:grid;gap:6px}
 .feature-list li{font-size:.82rem;color:var(--text-3);padding-left:16px;position:relative}
 .feature-list li::before{content:'▹';position:absolute;left:0;color:var(--cyan)}
+.project-link{
+  display:inline-flex;align-items:center;gap:8px;
+  margin-top:20px;padding-top:16px;
+  border-top:1px solid var(--line-soft);
+  font-family:var(--font-mono);font-size:.8rem;font-weight:500;
+  color:var(--cyan);transition:gap .3s,color .3s;
+}
+.project-link:hover{color:var(--violet-2);gap:12px}
+.project-link .arrow{transition:transform .35s var(--ease-soft)}
+.project-link:hover .arrow{transform:translateX(4px)}
 
 /* ============ LEARNING / CERT ============ */
 .split-2{display:grid;grid-template-columns:1fr 1fr;gap:26px}
@@ -704,3 +714,36 @@ footer{
 .back-to-top:hover{transform:translateY(-4px) scale(1.06)}
 
 :focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
+
+/* ============ TOUCH / NO-HOVER OVERRIDES ============ */
+/* Belt-and-braces: even if JS ever sets an inline transform,
+   force flat/static on touch devices so nothing looks stuck mid-tilt. */
+@media (hover:none), (pointer:coarse){
+  .code-window{transform:none !important}
+  .tilt-card{transform:none !important}
+  .project-card:hover{transform:none}
+  .skill-pill:hover{transform:none}
+}
+
+/* ============ SMALL-SCREEN SPACING FIXES ============ */
+/* Trims desktop-sized padding/min-heights that were leaving large
+   empty gaps inside cards and sections on phones. */
+@media (max-width:640px){
+  .hero{min-height:auto;padding-top:110px;padding-bottom:50px}
+  .about-visual{min-height:0;padding:26px}
+  .about-visual .quote-mark{font-size:2.6rem}
+  .about-visual .quote-txt{font-size:1.12rem}
+  .project-card{min-height:0;padding:24px 20px}
+  .freelance-banner{padding:32px 22px}
+  .contact-cta{padding:28px}
+  .contact-card{padding:26px;min-height:0}
+  .service-card{padding:22px 18px}
+  .check-card{padding:20px}
+}
+@media (max-width:420px){
+  .container{padding:0 16px}
+  .logo-text-sub{display:none}
+  .hero-copy h1{font-size:clamp(2rem,8vw,2.6rem)}
+  .code-body{min-height:220px}
+  .freelance-banner{padding:26px 18px}
+}
