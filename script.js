@@ -134,6 +134,7 @@ tabs.forEach(tab => {
     tabs.forEach(t => t.classList.remove('active'));
     panels.forEach(p => p.classList.remove('active'));
     tab.classList.add('active');
+    if (tab.scrollIntoView) tab.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
     document.querySelector(`.skill-panel[data-panel="${tab.dataset.tab}"]`).classList.add('active');
   });
 });
